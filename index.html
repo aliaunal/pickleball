@@ -40,8 +40,7 @@
       padding: 0.8rem 1rem;
       border-radius: 8px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
+      flex-direction: column;
       cursor: pointer;
       border: 2px solid transparent;
       transition: background 0.2s, border 0.2s;
@@ -52,8 +51,25 @@
       border-color: var(--green);
     }
 
-    li span {
-      font-size: 1rem;
+    .name-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    .alt-time {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    select {
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.9rem;
     }
 
     #reset-note {
@@ -74,20 +90,51 @@
     const today = new Date().toDateString();
     const STORAGE_KEY = "pickleball_" + today;
 
-    const list = document.getElementById("playerList");
     let availability = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+    const list = document.getElementById("playerList");
 
     function render() {
       list.innerHTML = '';
       players.forEach(name => {
+        const isAvailable = availability[name]?.in || false;
+        const altTime = availability[name]?.alt || "";
+
         const li = document.createElement("li");
-        li.className = availability[name] ? "available" : "";
-        li.innerHTML = `<span>${name}</span><span>${availability[name] ? "✅ In" : "❌ Out"}</span>`;
+        li.className = isAvailable ? "available" : "";
+
+        const nameRow = document.createElement("div");
+        nameRow.className = "name-row";
+        nameRow.innerHTML = `<span>${name}</span><span>${isAvailable ? "✅ In" : "❌ Out"}</span>`;
+
+        const altTimeRow = document.createElement("div");
+        altTimeRow.className = "alt-time";
+        altTimeRow.innerHTML = `
+          <label>This works better:</label>
+          <select>
+            <option value="">--</option>
+            <option value="11:30" ${altTime === "11:30" ? "selected" : ""}>11:30</option>
+            <option value="12:30" ${altTime === "12:30" ? "selected" : ""}>12:30</option>
+          </select>`;
+
+        // Toggle on name click
         li.onclick = () => {
-          availability[name] = !availability[name];
+          availability[name] = availability[name] || {};
+          availability[name].in = !availability[name].in;
           localStorage.setItem(STORAGE_KEY, JSON.stringify(availability));
           render();
         };
+
+        // Stop event propagation for select dropdown
+        altTimeRow.querySelector("select").onchange = (e) => {
+          e.stopPropagation();
+          availability[name] = availability[name] || {};
+          availability[name].alt = e.target.value;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(availability));
+        };
+
+        li.appendChild(nameRow);
+        li.appendChild(altTimeRow);
         list.appendChild(li);
       });
     }
