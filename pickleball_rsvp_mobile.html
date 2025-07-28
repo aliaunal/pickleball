@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pickleball RSVP</title>
+  <style>
+    :root {
+      --green: #28a745;
+      --red: #dc3545;
+      --bg: #f9f9f9;
+      --text: #333;
+    }
+
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1rem;
+      max-width: 480px;
+      margin-inline: auto;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      background: #fff;
+      margin-bottom: 0.5rem;
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: background 0.2s, border 0.2s;
+    }
+
+    li.available {
+      background: #d4edda;
+      border-color: var(--green);
+    }
+
+    li span {
+      font-size: 1rem;
+    }
+
+    #reset-note {
+      font-size: 0.85rem;
+      color: #777;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pickleball at Noon – Who's In?</h1>
+  <ul id="playerList"></ul>
+  <div id="reset-note">Resets daily at midnight (local time).</div>
+
+  <script>
+    const players = ["Aaron", "Addison", "Ali", "Blaise", "Bruce", "Chris", "Josh", "Johnna", "Shevonne"];
+    const today = new Date().toDateString();
+    const STORAGE_KEY = "pickleball_" + today;
+
+    const list = document.getElementById("playerList");
+    let availability = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+    function render() {
+      list.innerHTML = '';
+      players.forEach(name => {
+        const li = document.createElement("li");
+        li.className = availability[name] ? "available" : "";
+        li.innerHTML = `<span>${name}</span><span>${availability[name] ? "✅ In" : "❌ Out"}</span>`;
+        li.onclick = () => {
+          availability[name] = !availability[name];
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(availability));
+          render();
+        };
+        list.appendChild(li);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
