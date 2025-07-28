@@ -88,23 +88,20 @@
   <div id="reset-note">Resets daily at midnight (local time).</div>
 
   <script>
+    // Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyAFt2EjZ0j7enTELJEU_vRhLkpmnTsELFk",
+      authDomain: "rsvpickle.firebaseapp.com",
+      databaseURL: "https://rsvpickle-default-rtdb.firebaseio.com",
+      projectId: "rsvpickle",
+      storageBucket: "rsvpickle.firebasestorage.app",
+      messagingSenderId: "556688572062",
+      appId: "1:556688572062:web:5ba2d406dd57b34a14c58f",
+      measurementId: "G-BMZJNP9YBZ"
+    };
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAFt2EjZ0j7enTELJEU_vRhLkpmnTsELFk",
-  authDomain: "rsvpickle.firebaseapp.com",
-  databaseURL: "https://rsvpickle-default-rtdb.firebaseio.com",
-  projectId: "rsvpickle",
-  storageBucket: "rsvpickle.firebasestorage.app",
-  messagingSenderId: "556688572062",
-  appId: "1:556688572062:web:5ba2d406dd57b34a14c58f",
-  measurementId: "G-BMZJNP9YBZ"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-    firebase.initializeApp(firebaseConfig);
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
     const players = ["Aaron", "Addison", "Ali", "Blaise", "Bruce", "Chris", "Josh", "Johnna", "Shevonne"];
