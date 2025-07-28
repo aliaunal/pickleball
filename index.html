@@ -124,11 +124,11 @@
         const altTimeRow = document.createElement("div");
         altTimeRow.className = "alt-time";
         altTimeRow.innerHTML = `
-          <label>[AltTime] works better:</label>
+          <label>This works better:</label>
           <select>
             <option value="">--</option>
             <option value="11:30" ${altTime === "11:30" ? "selected" : ""}>11:30</option>
-            <option value="12:20" ${altTime === "12:20" ? "selected" : ""}>12:20</option>
+            <option value="12:30" ${altTime === "12:30" ? "selected" : ""}>12:30</option>
           </select>`;
 
         li.onclick = () => {
